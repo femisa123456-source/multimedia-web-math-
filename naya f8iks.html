@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Materi & Kuis Matematika Interaktif - Peluang</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg1: #efe8ff;
+    --bg2: #f9f5ff;
+    --accent: #8b5cf6; /* ungu */
+    --accent-2: #ff77b0; /* pink */
+    --card-bg: rgba(255,255,255,0.96);
+    --muted: #39484f;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family: 'Poppins', sans-serif;
+    margin:0;
+    padding:40px 18px;
+    background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+    color: #0f172a;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:1000px;margin:0 auto;}
+
+  header{
+    text-align:center;
+    padding:36px 22px;
+    border-radius:18px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(255,119,176,0.08));
+    /* deep shadow for header */
+    box-shadow: 0 28px 60px rgba(15,23,42,0.20), 0 10px 30px rgba(139,92,246,0.08) inset;
+    margin-bottom:30px;
+  }
+  header h1{margin:0;font-size:28px;color:var(--accent);font-weight:600}
+  header p{margin:8px 0 0;color:var(--muted)}
+
+  /* Deep card style (tegas & menonjol) */
+  .card{
+    background: var(--card-bg);
+    border-radius:16px;
+    padding:22px 24px;
+    margin-bottom:20px;
+    /* deep shadow */
+    box-shadow: 0 24px 60px rgba(15,23,42,0.20), 0 8px 24px rgba(139,92,246,0.06) inset;
+    border: 1px solid rgba(15,23,42,0.04);
+  }
+  .card h2{margin:0 0 8px;color:var(--accent)}
+  .card h3{margin:10px 0;color:var(--accent-2)}
+  .muted{color:var(--muted)}
+
+  .identitas p{margin:6px 0}
+  .btn-canva{
+    display:inline-block;
+    background: linear-gradient(90deg,var(--accent),#7c3aed);
+    color:white;
+    padding:12px 18px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+    box-shadow: 0 18px 44px rgba(139,92,246,0.24);
+    transition:transform .16s ease, box-shadow .16s ease;
+    margin-top:10px;
+    border: none;
+  }
+  .btn-canva:hover{transform:translateY(-6px); box-shadow: 0 26px 62px rgba(139,92,246,0.28);}
+
+  /* Materi formatting */
+  .rumus{
+    background: linear-gradient(90deg,#fff,#fbf8ff);
+    border-left:6px solid rgba(139,92,246,0.18);
+    padding:12px;
+    border-radius:10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace;
+    display:inline-block;
+    margin:10px 0;
+    box-shadow: 0 10px 26px rgba(15,23,42,0.08);
+  }
+  ul, ol{margin-left:20px;color:var(--muted)}
+  pre{background:#fbf8ff;padding:10px;border-radius:10px;overflow:auto;font-family:monospace}
+
+  /* Menu & card for quiz entry */
+  .menu{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+  .menu .card{flex:1;min-width:280px}
+
+  /* Quiz styles */
+  .quiz-container{
+    display:none;
+    padding:26px;
+    border-radius:14px;
+    background:var(--card-bg);
+    /* deep shadow for quiz */
+    box-shadow: 0 30px 72px rgba(15,23,42,0.24);
+    margin-top:22px;
+  }
+  .quiz-container.active{display:block}
+
+  .option{
+    display:block;
+    background: linear-gradient(90deg,#fff6fb,#fff);
+    border-radius:14px;
+    padding:14px 16px;
+    margin:12px 0;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+    border:1px solid rgba(15,23,42,0.04);
+    box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+  }
+  .option:hover{transform:translateY(-6px); box-shadow: 0 20px 42px rgba(15,23,42,0.12)}
+  .option.selected{
+    background: linear-gradient(90deg, rgba(139,92,246,0.98), rgba(255,119,176,0.98));
+    color:#fff;
+    border: none;
+    box-shadow: 0 26px 58px rgba(139,92,246,0.22);
+    transform: translateY(-6px);
+  }
+
+  .btn{
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:white;
+    padding:11px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow: 0 20px 48px rgba(139,92,246,0.20);
+    border: none;
+  }
+  .btn:active{transform:translateY(2px)}
+
+  .result{margin-top:16px}
+  .explain{margin-top:10px;color:var(--muted);padding:14px;background:#fbf9ff;border-radius:12px;border-left:6px solid rgba(139,92,246,0.08);box-shadow: 0 10px 26px rgba(15,23,42,0.06)}
+
+  footer{margin-top:30px;text-align:center;color:var(--muted);font-size:14px}
+  @media (max-width:720px){
+    header h1{font-size:22px}
+    .menu{flex-direction:column}
+  }
+</style>
+
+<!-- MathJax for nice math rendering -->
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🎓 Materi & Kuis Matematika Interaktif — Peluang</h1>
+      <p class="muted">Versi Deep Shadow — desain tegas & menonjol</p>
+    </header>
+
+    <!-- Identitas -->
+    <section class="card identitas">
+      <h2>🧾 Identitas</h2>
+      <p><strong>Nama:</strong> Femisa Ari Khusnaya</p>
+      <p><strong>NIM:</strong> B2B023032</p>
+      <p class="muted">Mata Kuliah: Multimedia Web</p>
+      <a class="btn-canva" href="https://www.canva.com/design/DAG1TC49u0g/wRfrTgnFVgXSJk35nHJFgA/edit" target="_blank" rel="noopener">🔗 Lihat Materi di Canva</a>
+    </section>
+
+    <!-- Materi lengkap (7 bagian) -->
+    <section class="card materi" id="materi">
+      <h2>📘 MATERI PELUANG</h2>
+      <p class="muted">Berikut ringkasan <strong>materi peluang (probabilitas)</strong> secara <strong>jelas dan lengkap tapi tetap ringkas</strong> — cocok untuk kelas 11 SMA Kurikulum Merdeka.</p>
+      <hr style="border:none;margin:12px 0 16px;border-top:1px solid rgba(15,23,42,0.04)">
+
+      <h3>1. Pengertian Peluang</h3>
+      <p>Peluang atau <em>probabilitas</em> adalah <strong>ukuran kemungkinan terjadinya suatu peristiwa</strong>. Contoh: saat melempar sebuah dadu, peluang munculnya angka 6 adalah 1 dari 6 kemungkinan.</p>
+      <div class="rumus">\(P(A) = \dfrac{n(A)}{n(S)}\)</div>
+      <ul>
+        <li><strong>P(A)</strong>: peluang kejadian A</li>
+        <li><strong>n(A)</strong>: banyak hasil yang diinginkan</li>
+        <li><strong>n(S)</strong>: banyak hasil keseluruhan ruang sampel</li>
+      </ul>
+
+      <h3>2. Ruang Sampel (S) dan Kejadian (A)</h3>
+      <ul>
+        <li><strong>Ruang Sampel (S)</strong> → himpunan semua kemungkinan hasil percobaan. Contoh: melempar koin → \(S=\{A,G\}\).</li>
+        <li><strong>Kejadian (A)</strong> → bagian dari ruang sampel. Contoh: kejadian muncul angka genap pada dadu → \(A=\{2,4,6\}\).</li>
+      </ul>
+
+      <h3>3. Jenis-jenis Peluang</h3>
+      <ol>
+        <li><strong>Peluang Empiris (Eksperimen Nyata)</strong><br>
+            Diperoleh dari hasil percobaan nyata.<br>
+            <div class="rumus">\(P(A)=\dfrac{\text{frekuensi kejadian A}}{\text{jumlah percobaan}}\)</div>
+        </li>
+        <li><strong>Peluang Teoretis</strong><br>
+            Berdasarkan perhitungan matematika (tanpa percobaan).<br>
+            <div class="rumus">\(P(A)=\dfrac{n(A)}{n(S)}\)</div>
+        </li>
+      </ol>
+
+      <h3>4. Sifat-sifat Peluang</h3>
+      <ol>
+        <li>\(0 \le P(A) \le 1\)</li>
+        <li>\(P(S) = 1\)</li>
+        <li>\(P(A') = 1 - P(A)\) (komplemen kejadian)</li>
+        <li>Jika A dan B <strong>saling lepas</strong>, maka <div class="rumus">\(P(A \text{ atau } B)=P(A)+P(B)\)</div></li>
+        <li>Jika A dan B <strong>tidak saling lepas</strong>, maka <div class="rumus">\(P(A \text{ atau } B)=P(A)+P(B)-P(A \text{ dan } B)\)</div></li>
+      </ol>
+
+      <h3>5. Peluang Kejadian Majemuk</h3>
+      <ul>
+        <li><strong>A dan B saling bebas:</strong> <div class="rumus">\(P(A \text{ dan } B)=P(A)\times P(B)\)</div></li>
+        <li><strong>A dan B tidak saling bebas:</strong> <div class="rumus">\(P(A \text{ dan } B)=P(A)\times P(B|A)\)</div></li>
+      </ul>
+
+      <h3>6. Peluang Bersyarat</h3>
+      <p>Menentukan peluang suatu kejadian terjadi dengan syarat kejadian lain sudah terjadi.</p>
+      <div class="rumus">\(P(A|B)=\dfrac{P(A \text{ dan } B)}{P(B)}\)</div>
+
+      <h3>7. Contoh Soal</h3>
+      <p><strong>Soal:</strong> Sebuah dadu dilempar satu kali. Berapa peluang munculnya bilangan genap?</p>
+      <p><strong>Penyelesaian:</strong></p>
+      <ul>
+        <li>\(S=\{1,2,3,4,5,6\}\) → \(n(S)=6\)</li>
+        <li>\(A=\{2,4,6\}\) → \(n(A)=3\)</li>
+      </ul>
+      <div class="rumus">\(P(A)=\dfrac{3}{6}=\dfrac{1}{2}\)</div>
+      <p><strong>Jadi peluang muncul bilangan genap adalah \( \tfrac{1}{2} \) atau 0,5.</strong></p>
+    </section>
+
+    <!-- Menu + Kuis trigger -->
+    <section class="menu">
+      <div class="card">
+        <h2>🎯 Kuis: Peluang</h2>
+        <p class="muted">Uji pemahamanmu dengan 10 soal interaktif. Skor dan pembahasan muncul setelah selesai.</p>
+        <button class="btn" onclick="startQuiz()">▶️ Mulai Kuis</button>
+      </div>
+
+      <div class="card">
+        <h2>📌 Petunjuk</h2>
+        <ul class="muted">
+          <li>Pilih satu jawaban untuk setiap soal.</li>
+          <li>Tekan <strong>Lanjut</strong> untuk menyimpan jawaban dan buka soal berikutnya.</li>
+          <li>Setelah selesai, skor dan pembahasan akan muncul.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- KUIS -->
+    <section id="quizBox" class="quiz-container" aria-live="polite">
+      <h2 id="quizTitle">Kuis Peluang</h2>
+      <div id="progress" class="muted" style="margin-bottom:8px"></div>
+      <div id="question" style="font-weight:700;margin-bottom:12px"></div>
+      <div id="options"></div>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <button id="nextBtn" class="btn" onclick="nextQuestion()">Lanjut</button>
+        <button class="btn" style="background:linear-gradient(90deg,#bbbbbb,#dddddd);color:#0f172a" onclick="kembaliKeMenu()">Kembali</button>
+      </div>
+
+      <div id="explanationArea" class="explain" style="display:none"></div>
+      <div id="result" class="result"></div>
+    </section>
+
+    <footer>© 2025 — Materi Interaktif Matematika | Dibuat dengan 💜 oleh Femisa Ari Khusnaya</footer>
+  </div>
+
+<script>
+/* ===== QUIZ DATA ===== */
+const quizData=[
+  {q:"1. Sebuah dadu dilempar. Peluang muncul angka genap adalah ...",o:["A. 1/6","B. 1/2","C. 2/3","D. 1/3"],a:1,e:"Angka genap 2,4,6 → 3/6 = 1/2"},
+  {q:"2. Sebuah koin dilempar. Peluang muncul gambar adalah ...",o:["A. 1/3","B. 1/2","C. 1/4","D. 1"],a:1,e:"Koin memiliki dua sisi → 1/2"},
+  {q:"3. Sebuah dadu dilempar. Peluang muncul angka 1 adalah ...",o:["A. 1/6","B. 1/3","C. 1/2","D. 1"],a:0,e:"Hanya ada satu sisi angka 1 dari 6 sisi → 1/6"},
+  {q:"4. Dua koin dilempar. Peluang muncul dua gambar adalah ...",o:["A. 1/4","B. 1/2","C. 3/4","D. 1/3"],a:0,e:"Ruang sampel: GG, GA, AG, AA → 1/4 dua gambar"},
+  {q:"5. Dari kartu 1–10 diambil satu. Peluang mendapatkan bilangan genap adalah ...",o:["A. 1/5","B. 1/2","C. 2/3","D. 1/10"],a:1,e:"Genap: 2,4,6,8,10 → 5 dari 10 → 1/2"},
+  {q:"6. Sebuah spinner dibagi menjadi 8 bagian sama besar. Peluang berhenti di angka 3 adalah ...",o:["A. 1/4","B. 1/8","C. 1/2","D. 1"],a:1,e:"1 bagian dari 8 → 1/8"},
+  {q:"7. Sebuah kantong berisi 5 bola merah dan 5 bola biru. Peluang ambil bola merah adalah ...",o:["A. 1/5","B. 1/2","C. 2/5","D. 3/5"],a:1,e:"Total 10 bola, merah 5 → 5/10 = 1/2"},
+  {q:"8. Jika peluang hujan hari ini 0,3 maka peluang tidak hujan adalah ...",o:["A. 0,7","B. 0,3","C. 1,3","D. 0,5"],a:0,e:"P(tidak hujan)=1–0,3=0,7"},
+  {q:"9. Dari angka 1–5 diambil satu angka. Peluang mendapat angka lebih dari 3 adalah ...",o:["A. 1/5","B. 2/5","C. 3/5","D. 4/5"],a:1,e:"Lebih dari 3 → {4,5} → 2/5"},
+  {q:"10. Jika melempar dadu dua kali, peluang muncul dua angka 6 adalah ...",o:["A. 1/36","B. 1/12","C. 1/18","D. 1/6"],a:0,e:"1/6 × 1/6 = 1/36"}
+];
+
+let current=0, score=0, selected=null;
+const review=[];
+
+/* ===== UI FUNCTIONS ===== */
+function startQuiz(){
+  // show quiz section
+  document.getElementById('quizBox').classList.add('active');
+  // scroll to quiz
+  window.scrollTo({top: document.getElementById('quizBox').offsetTop - 24, behavior:'smooth'});
+  loadQuestion();
+}
+
+function kembaliKeMenu(){
+  // reload to reset state
+  location.reload();
+}
+
+function loadQuestion(){
+  selected = null;
+  const q = quizData[current];
+  document.getElementById('progress').innerText = `Soal ${current+1} dari ${quizData.length}`;
+  document.getElementById('question').innerText = q.q;
+  const opt = document.getElementById('options');
+  opt.innerHTML = '';
+  q.o.forEach((text, i)=>{
+    const d = document.createElement('div');
+    d.className = 'option';
+    d.tabIndex = 0;
+    d.innerText = text;
+    d.onclick = ()=> selectOption(i, d);
+    d.onkeydown = (ev)=>{ if(ev.key === 'Enter' ) selectOption(i,d); };
+    opt.appendChild(d);
+  });
+  document.getElementById('explanationArea').style.display = 'none';
+  document.getElementById('result').innerHTML = '';
+}
+
+function selectOption(i, elem){
+  selected = i;
+  document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  elem.classList.add('selected');
+}
+
+function nextQuestion(){
+  if(selected === null){
+    alert('Pilih jawaban dulu!');
+    return;
+  }
+  const q = quizData[current];
+  const benar = (selected === q.a);
+  if(benar) score++;
+  review.push({
+    soal: q.q,
+    pilihan: q.o[selected],
+    status: benar ? '✅ Benar' : '❌ Salah',
+    pembahasan: q.e
+  });
+
+  // show brief explanation for current question
+  document.getElementById('explanationArea').style.display = 'block';
+  document.getElementById('explanationArea').innerText = `Pembahasan singkat: ${q.e}`;
+
+  // small delay so user sees explanation then next
+  setTimeout(()=>{
+    current++;
+    if(current < quizData.length){
+      loadQuestion();
+    } else {
+      tampilHasil();
+    }
+  }, 700);
+}
+
+function tampilHasil(){
+  const box = document.getElementById('quizBox');
+  let html = `<h2>🎉 Kuis Selesai!</h2><h3>Skor Kamu: ${score}/${quizData.length}</h3><hr><h3>Pembahasan:</h3>`;
+  review.forEach((r,i)=>{
+    html += `<p><strong>${i+1}. ${r.soal}</strong><br>${r.status}<br><em>${r.pembahasan}</em></p><hr>`;
+  });
+  html += `<div style="margin-top:12px"><button class="btn" onclick="kembaliKeMenu()">⬅️ Kembali ke Menu</button></div>`;
+  box.innerHTML = html;
+  window.scrollTo({top: box.offsetTop - 24, behavior:'smooth'});
+}
+
+/* Render math when MathJax loaded */
+window.addEventListener('load', ()=> {
+  if(window.MathJax) MathJax.typesetPromise?.();
+});
+</script>
+</body>
+</html>
